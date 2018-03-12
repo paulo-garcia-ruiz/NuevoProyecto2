@@ -5,10 +5,116 @@
  */
 package modelo;
 
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
+
 /**
  *
  * @author ludus
  */
 public class PostularDAO {
+    private SessionFactory sessionFactory;
+    
+    public PostularDAO() {
+        this.sessionFactory = HibernateUtil.getSessionFactory();
+    }
+    
+    public void insert(Postular pst) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+        
+        try {
+           transaction = session.beginTransaction();
+           session.persist(pst);
+           transaction.commit();
+        }
+        catch (Exception e) {
+            
+           if (transaction != null){ 
+               transaction.rollback();
+           }
+           
+           e.printStackTrace(); 
+        }
+        finally {
+           session.close();
+        }
+        
+    }
+    
+    public Postular select(int id) {
+        Postular resultado = null;
+        Transaction transaccion = null;
+        Session session = sessionFactory.openSession();
+        
+        try {
+            transaccion = session.beginTransaction();
+            String hql = "from Postular as p where p.idpostular = " + id;
+            Query query = session.createQuery(hql);
+            resultado = (Postular)query.uniqueResult();
+            transaccion.commit();
+        }
+        catch (Exception e) {
+
+            if (transaccion!=null) {
+                transaccion.rollback();
+            }
+            
+            e.printStackTrace(); 
+        }
+        finally {
+            session.close();
+        }
+        
+        return resultado;
+    }
+    
+    public void update(Postular pst) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+        
+        try {
+           transaction = session.beginTransaction();
+           session.update(pst);
+           transaction.commit();
+        }
+        catch (Exception e) {
+            
+           if (transaction != null){ 
+               transaction.rollback();
+           }
+           
+           e.printStackTrace(); 
+        }
+        finally {
+           session.close();
+        }
+        
+    }
+    
+    public void delete(Postular pst) {
+        Session session = sessionFactory.openSession();
+        Transaction transaction = null;
+        
+        try {
+           transaction = session.beginTransaction();
+           session.delete(pst);
+           transaction.commit();
+        }
+        catch (Exception e) {
+            
+           if (transaction != null){ 
+               transaction.rollback();
+           }
+           
+           e.printStackTrace(); 
+        }
+        finally {
+           session.close();
+        }
+        
+    }
     
 }
