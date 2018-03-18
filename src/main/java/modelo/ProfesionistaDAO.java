@@ -53,7 +53,7 @@ public class ProfesionistaDAO {
         }
         catch (Exception e) {
 
-            if (transaccion!=null) {
+            if (transaccion != null) {
                 transaccion.rollback();
             }
             
@@ -110,6 +110,15 @@ public class ProfesionistaDAO {
            session.close();
         }
         
+    }
+    
+    public Profesionista validar(int id,String contrasenia) {
+        Profesionista prof = select(id);
+        
+        if (prof != null && prof.getContrasenia().equals(contrasenia))
+            return prof;
+        else
+            return null;
     }
     
 }
